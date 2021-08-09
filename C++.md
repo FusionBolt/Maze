@@ -26,13 +26,23 @@ macOS下cmake寻找python会默认去找系统自带的版本，即` /usr/local/
 
 ## Conan
 
-提示某个包被lock了，如果remove lock不管用直接到` ~/.conan/data`删掉对应的包重新下载
-
 关于Conan的问题，犹豫不决就直接去删包
+
+1. 某个包被lock
+
+如果remove lock不管用直接到` ~/.conan/data`删掉对应的包重新下载
+
+2. 遇到类似这种问题也删掉重新安装
 
 > ERROR: The 'libzip/1.7.3' package has 'exports_sources' but sources not found in local cache. Probably it was installed from a remote that is no longer available.
 
-遇到类似这种问题也删掉重新安装
+3. 在macOS下使用Conan编译flatbuffers2.0的flatc可执行文件时出错，提示` ld: library not found for -lcrt0.o`
+
+最后更改conanfile.py中flatbuffers的选项
+
+` self.options['flatbuffers'].shared = True`
+
+事后反思应该去conan-center查看这个包在版本变动的前后哪些配置发生了变化
 
 ## 编译
 
