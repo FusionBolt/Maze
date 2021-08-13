@@ -38,11 +38,23 @@ macOS下cmake寻找python会默认去找系统自带的版本，即` /usr/local/
 
 3. 在macOS下使用Conan编译flatbuffers2.0的flatc可执行文件时出错，提示` ld: library not found for -lcrt0.o`
 
-最后更改conanfile.py中flatbuffers的选项
++ 产生这个错误的根本原因是macOS不支持非kernel的包的`- static`选项，导致macOS缺少很多动态链接的库
 
-` self.options['flatbuffers'].shared = True`
+macOS下`man ld`的结果信息
 
-事后反思应该去conan-center查看这个包在版本变动的前后哪些配置发生了变化
+> Produces a mach-o file that does not use the dyld.  Only used building the kernel.
+
++ 产生这个错误的很重要的原因是conan-center-index有一套自己的conanfile.py，而flatbuffers官方项目下的conanfile中一直未设置过`FLATBUFFERS_STATIC_FLATC`
+
+最后修改了conan-center-index的flatbuffers的conanfile.py。最终去掉了
+
+```python
+self._cmake.definitions["FLATBUFFERS_STATIC_FLATC"] = not self.options.shared
+```
+
+在合并之前公司项目里有自己的conan源，直接更改了自己源中的对应选项
+
+关于沟通过程，详见这个pr：https://github.com/conan-io/conan-center-index/pull/6796
 
 ## 编译
 
