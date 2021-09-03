@@ -82,9 +82,19 @@ CXX=/usr/bin/clang++
 
 ## 链接
 
-` objdump -t libfile`查看库中的符号，如果链接失败的话查看生成的内容是否存在对应链接失败的符号
+先检查头文件的符号与实现的符号是否一样，尤其是注意是否const对应好
+
+\` objdump -t libfile`查看库中的符号，如果链接失败的话查看生成的内容是否存在对应链接失败的符号
 
 检查cmake中是否添加了对应的library到target中
+
+### MSVC
+
+某个符号如果未被使用则不会被导出，需要找一个地方使用一次才行
+
+c4273：
+
+可能出现的一种情况是当前库与被链接库的dll导出导入不同。一个库是\_\_declspec(dllexport)，另一个库是\__declspec(dllimport)
 
 ## 第三方库与工具
 
