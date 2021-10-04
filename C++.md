@@ -56,6 +56,24 @@ self._cmake.definitions["FLATBUFFERS_STATIC_FLATC"] = not self.options.shared
 
 关于沟通过程，详见这个pr：https://github.com/conan-io/conan-center-index/pull/6796
 
+4. 报错：incorrect 'clang' is not one detected by CMake: 'GNU'
+
+指定编译器为clang的情况下会遇到这个情况
+
+在~/.conan/profiles/default中设置env的值
+
+```
+[env] 
+CC=/usr/bin/clang 
+CXX=/usr/bin/clang++
+```
+
+5. manjaro下安装某个conan包的时候提示找不到libturbojpeg.a
+
+到/usr/lib下不存在该文件，只有.so
+
+原因是manjaro官方源的对应包中不包含静态链接库，需要手动编译安装libjpeg-turbo到对应路径下[当前日期:2021.8.28]
+
 ## 编译
 
 如果使用make -j有可能出现内存不足的问题，需要手动指定线程数或者再make -j一次（但是如果要编的太大，会再次遇到这种问题）
@@ -64,9 +82,19 @@ self._cmake.definitions["FLATBUFFERS_STATIC_FLATC"] = not self.options.shared
 
 ## 链接
 
-` objdump -t libfile`查看库中的符号，如果链接失败的话查看生成的内容是否存在对应链接失败的符号
+先检查头文件的符号与实现的符号是否一样，尤其是注意是否const对应好
+
+\` objdump -t libfile`查看库中的符号，如果链接失败的话查看生成的内容是否存在对应链接失败的符号
 
 检查cmake中是否添加了对应的library到target中
+
+### MSVC
+
+某个符号如果未被使用则不会被导出，需要找一个地方使用一次才行
+
+c4273：
+
+可能出现的一种情况是当前库与被链接库的dll导出导入不同。一个库是\_\_declspec(dllexport)，另一个库是\__declspec(dllimport)
 
 ## 第三方库与工具
 
