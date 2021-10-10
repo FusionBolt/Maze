@@ -108,7 +108,23 @@ pybind11
 
 objdump -t查看符号
 
-otool -L/-l 查看链接的依赖（windows下使用dependencies）
+### 查看依赖
+
+macOS: otool -L/-l
+
+linux: ldd
+
+windows: dependencies
+
+## 安装conda后出现GLIBCXX_XXX not found
+
+strings /usr/lib/libstdc++.so.6 | grep GLIBCXX_3.4.29
+
+sudo mv libstdc++.so.6 backpacklibstdc++.so.6
+
+sudo ln -s /usr/lib/libstdc++.so.6 ./libstdc++.so.6
+
+https://askubuntu.com/questions/575505/glibcxx-3-4-20-not-found-how-to-fix-this-error/764572#764572
 
 ## CLion
 
