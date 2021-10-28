@@ -122,7 +122,7 @@ windows: dependencies
 
 strings /usr/lib/libstdc++.so.6 | grep GLIBCXX_3.4.29
 
-存在的话进入anaconda的安装目录，用类似的命令查看anaconda中的库是否包含这个符号，不包含则执行以下命令
+存在的话进入anaconda当前env的lib目录，比如说～/.conda/envs/default/lib/，用类似的命令查看anaconda中的库是否包含这个符号，不包含则执行以下命令
 
 sudo mv libstdc++.so.6 backpacklibstdc++.so.6
 
